@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘彦峰 | Interactive Resume</title>
+    <link rel="stylesheet" href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire_1-y/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --cyber-blue: #00f3ff;
+            --cyber-purple: #b026ff;
+            --text-main: #e2e8f0;
+            --text-muted: #8892b0;
+            --glass-bg: rgba(15, 20, 30, 0.6);
+        }
+        body, html { margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* 极客光标 */
+        body { cursor: crosshair; }
+        a, button { cursor: pointer; }
+
+        /* 导航栏 */
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; justify-content: space-between; box-sizing: border-box; border-bottom: 1px solid rgba(0,243,255,0.1); }
+        nav .logo { font-weight: 900; font-size: 1.5rem; color: var(--cyber-blue); text-shadow: 0 0 10px rgba(0,243,255,0.5); letter-spacing: 2px; }
+        nav .links a { color: var(--text-main); text-decoration: none; margin-left: 30px; font-weight: bold; transition: color 0.3s; }
+        nav .links a:hover { color: var(--cyber-blue); }
+
+        /* 首屏：黑客打字机 */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: radial-gradient(circle at center, #111 0%, #000 100%); }
+        .glitch-wrapper { text-align: center; z-index: 2; }
+        .hero-title { font-size: 4.5rem; font-weight: 900; margin: 0; text-transform: uppercase; background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .typewriter { font-family: monospace; font-size: 1.5rem; color: var(--cyber-blue); margin-top: 15px; border-right: 2px solid var(--cyber-blue); padding-right: 5px; animation: blink 0.8s infinite; white-space: nowrap; overflow: hidden; }
+        @keyframes blink { 50% { border-color: transparent; } }
+        
+        /* 荒诞派哲学引用框 */
+        .camus-quote { margin-top: 40px; padding: 20px 40px; border-left: 4px solid var(--cyber-purple); background: var(--glass-bg); font-style: italic; color: var(--text-muted); max-width: 600px; text-align: center; border-radius: 0 8px 8px 0; backdrop-filter: blur(5px); }
+
+        /* 通用区块样式 */
+        section { padding: 100px 10%; max-width: 1200px; margin: 0 auto; position: relative; }
+        .section-title { font-size: 2.5rem; color: var(--cyber-blue); margin-bottom: 50px; display: inline-block; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 50%; height: 3px; background: var(--cyber-blue); box-shadow: 0 0 10px var(--cyber-blue); }
+
+        /* 第二屏：六边形战士雷达图布局 */
+        .skills-container { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 40px; }
+        .radar-chart { flex: 1; min-width: 400px; height: 500px; }
+        .skills-desc { flex: 1; min-width: 300px; }
+        .skill-tag { display: inline-block; padding: 8px 15px; background: rgba(0,243,255,0.1); border: 1px solid var(--cyber-blue); color: var(--cyber-blue); border-radius: 20px; margin: 5px; font-size: 0.9rem; font-family: monospace; }
+
+        /* 第三屏：赛博时间轴 */
+        .timeline { position: relative; padding-left: 30px; border-left: 2px solid rgba(0,243,255,0.2); }
+        .timeline-item { position: relative; margin-bottom: 50px; background: var(--glass-bg); padding: 30px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s, box-shadow 0.3s; }
+        .timeline-item:hover { transform: translateX(10px); box-shadow: 0 0 20px rgba(0,243,255,0.15); border-color: rgba(0,243,255,0.3); }
+        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 30px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg-dark); border: 2px solid var(--cyber-blue); box-shadow: 0 0 10px var(--cyber-blue); }
+        .time-badge { color: var(--cyber-purple); font-family: monospace; font-weight: bold; margin-bottom: 10px; display: block; }
+        .item-title { font-size: 1.5rem; margin: 0 0 10px 0; color: #fff; }
+        .item-subtitle { color: var(--cyber-blue); font-size: 1rem; margin-bottom: 15px; font-weight: bold; }
+        .item-desc { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+        /* 底部链接区 */
+        .footer-card { text-align: center; padding: 60px; background: linear-gradient(135deg, rgba(0,243,255,0.1), rgba(176,38,255,0.1)); border-radius: 20px; border: 1px solid rgba(0,243,255,0.2); margin-bottom: 50px; }
+        .btn { padding: 15px 40px; background: transparent; border: 2px solid var(--cyber-blue); color: var(--cyber-blue); font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s; margin: 10px; text-decoration: none; display: inline-block; }
+        .btn:hover { background: var(--cyber-blue); color: var(--bg-dark); box-shadow: 0 0 20px var(--cyber-blue); }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .skills-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">LYF_PORTFOLIO</div>
+        <div class="links">
+            <a href="#skills">核心堆栈</a>
+            <a href="#experience">实战纪元</a>
+            <a href="https://blog.lyf233.cn">数字自留地</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="glitch-wrapper">
+            <h1 class="hero-title">刘彦峰</h1>
+            <div class="typewriter" id="typewriter-text"></div>
+            <div class="camus-quote">
+                "对电磁场理论、嵌入式系统与智能控制抱有极高热忱。在推石头的荒诞中，找寻数字与物理世界的真理。"
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">01. 核心堆栈 / TECH STACK</h2>
+        <div class="skills-container">
+            <div class="skills-desc">
+                <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;">
+                    不仅限于传统的强弱电理论，我更倾向于构建从硬件底层到云端部署的闭环生态。现于西南石油大学李平原教授团队中深耕科研。
+                </p>
+                <div style="margin-bottom: 15px;">
+                    <strong style="color:#fff; display:block; margin-bottom:10px;">硬件与底层控制</strong>
+                    <span class="skill-tag">Arduino</span> <span class="skill-tag">STM32</span> <span class="skill-tag">Keil/Proteus</span> <span class="skill-tag">PLC编程</span>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong style="color:#fff; display:block; margin-bottom:10px;">工程仿真与算法</strong>
+                    <span class="skill-tag">MATLAB</span> <span class="skill-tag">Simulink</span> <span class="skill-tag">电磁场动力学计算</span>
+                </div>
+                <div>
+                    <strong style="color:#fff; display:block; margin-bottom:10px;">软件全栈与 AI 部署</strong>
+                    <span class="skill-tag">C/Java/Python</span> <span class="skill-tag">Docker</span> <span class="skill-tag">本地大模型部署</span> <span class="skill-tag">Web 3D可视化</span>
+                </div>
+            </div>
+            <div class="radar-chart" id="radar-canvas"></div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="section-title">02. 实战纪元 / EXPERIENCE</h2>
+        <div class="timeline">
+            
+            <div class="timeline-item">
+                <span class="time-badge">2026.03 - 至今</span>
+                <h3 class="item-title">“AI+物理实验”带电粒子电磁场动力学 3D仿真平台</h3>
+                <div class="item-subtitle">核心开发者 | 物理引擎与 WebGL 架构</div>
+                <div class="item-desc">
+                    突破传统物理实验限制，将电磁场理论与 Web 前端渲染技术深度结合。构建了带电粒子在三维空间中受洛伦兹力运动的可视化仿真引擎，极大地提升了理论参数调节的实时交互性与直观体验。
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <span class="time-badge">2024.09 - 至今</span>
+                <h3 class="item-title">油气管网场站巡检机器人研究</h3>
+                <div class="item-subtitle">科研骨干 | 项目编号: 2024KSP07025</div>
+                <div class="item-desc">
+                    针对油气管网特殊高危环境，深入参与巡检机器人底层控制系统研发。结合电气工程与自动化专业知识，不断优化机器人的电机驱动逻辑与环境感知数据采集稳定性。
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <span class="time-badge">2026.01 - 2026.02</span>
+                <h3 class="item-title">中国广电四川网络股份有限公司</h3>
+                <div class="item-subtitle">网络维护工程师 (实习) | 安居区分公司</div>
+                <div class="item-desc">
+                    主导辖区内 HFC 网络、光纤传输系统及核心交换设备的日常巡检与调试。降维运用高校电气与供配电理论知识解决弱电系统综合布线痛点，凭借高精度的网络故障排查效率，获官方“表现优异”评价。
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <span class="time-badge">2023.09 - 持续推进</span>
+                <h3 class="item-title">个人数字化基础设施建设</h3>
+                <div class="item-subtitle">全栈架构师 | Docker & Serverless</div>
+                <div class="item-desc">
+                    独立研发并上线高定制化个人极客站点 (lyf233.cn)。运用 Docker 容器技术在本地 GPU 成功部署大型 AI 模型，并打通 API 接口，搭建了专属于个人的智能知识库与 AI 代理终端。同时主导基于 Arduino 的智能小车底层 C 语言控制开发。
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="footer-card">
+            <h2 style="font-size: 2rem; margin-bottom: 20px;">准备好建立连接了吗？</h2>
+            <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">无论是硬核的学术探讨，还是极客项目合作，随时欢迎发送电波。</p>
+            <a href="mailto:863088821@qq.com" class="btn"><i class="fas fa-envelope"></i> 触发邮件协议</a>
+            <a href="https://blog.lyf233.cn" class="btn" style="background: var(--cyber-blue); color: var(--bg-dark);"><i class="fas fa-globe"></i> 跃迁至数字自留地</a>
+        </div>
+    </section>
+
+    <script>
+        // 1. 打字机特效逻辑
+        const texts = ["电气工程与自动化 本科", "全栈独立开发者", "微电网底层架构师", "推石头的西西弗斯"];
+        let count = 0; let index = 0; let currentText = ""; let letter = "";
+        
+        function type() {
+            if (count === texts.length) { count = 0; }
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+            document.getElementById("typewriter-text").textContent = letter;
+            if (letter.length === currentText.length) {
+                count++; index = 0;
+                setTimeout(type, 2000); // 停顿2秒
+            } else {
+                setTimeout(type, 100); // 打字速度
+            }
+        }
+        setTimeout(type, 500);
+
+        // 2. 六边形战士雷达图 (ECharts)
+        const chartDom = document.getElementById('radar-canvas');
+        const myChart = echarts.init(chartDom, 'dark');
+        const option = {
+            backgroundColor: 'transparent',
+            radar: {
+                indicator: [
+                    { name: '硬件/单片机 (Arduino/STM32)', max: 100 },
+                    { name: '电气仿真与建模 (MATLAB)', max: 100 },
+                    { name: '自动化控制 (PLC/弱电)', max: 100 },
+                    { name: '软件编程 (C/Java/Python)', max: 100 },
+                    { name: '前端图形学 (Web/3D)', max: 100 },
+                    { name: 'AI/容器化部署 (Docker)', max: 100 }
+                ],
+                center: ['50%', '50%'], radius: '65%',
+                splitArea: { areaStyle: { color: ['rgba(0,243,255,0.02)', 'rgba(0,243,255,0.05)'] } },
+                axisLine: { lineStyle: { color: 'rgba(0,243,255,0.2)' } },
+                splitLine: { lineStyle: { color: 'rgba(0,243,255,0.2)' } },
+                axisName: { color: '#00f3ff', fontSize: 13, fontFamily: 'monospace' }
+            },
+            series: [{
+                type: 'radar',
+                data: [{
+                    value: [85, 95, 80, 85, 90, 92],
+                    name: '技能维度',
+                    itemStyle: { color: '#b026ff' },
+                    areaStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
+                        { offset: 0, color: 'rgba(176,38,255,0.1)' },
+                        { offset: 1, color: 'rgba(176,38,255,0.5)' }
+                    ])},
+                    lineStyle: { width: 2, color: '#b026ff' }
+                }]
+            }]
+        };
+        myChart.setOption(option);
+        window.addEventListener('resize', () => myChart.resize());
+    </script>
+</body>
+</html>
