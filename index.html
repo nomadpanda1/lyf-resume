@@ -1,226 +1,247 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>刘彦峰 | Interactive Resume</title>
-    <link rel="stylesheet" href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire_1-y/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    <style>
-        :root {
-            --bg-dark: #0a0a0a;
-            --cyber-blue: #00f3ff;
-            --cyber-purple: #b026ff;
-            --text-main: #e2e8f0;
-            --text-muted: #8892b0;
-            --glass-bg: rgba(15, 20, 30, 0.6);
-        }
-        body, html { margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-main); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* 极客光标 */
-        body { cursor: crosshair; }
-        a, button { cursor: pointer; }
-
-        /* 导航栏 */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; justify-content: space-between; box-sizing: border-box; border-bottom: 1px solid rgba(0,243,255,0.1); }
-        nav .logo { font-weight: 900; font-size: 1.5rem; color: var(--cyber-blue); text-shadow: 0 0 10px rgba(0,243,255,0.5); letter-spacing: 2px; }
-        nav .links a { color: var(--text-main); text-decoration: none; margin-left: 30px; font-weight: bold; transition: color 0.3s; }
-        nav .links a:hover { color: var(--cyber-blue); }
-
-        /* 首屏：黑客打字机 */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: radial-gradient(circle at center, #111 0%, #000 100%); }
-        .glitch-wrapper { text-align: center; z-index: 2; }
-        .hero-title { font-size: 4.5rem; font-weight: 900; margin: 0; text-transform: uppercase; background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .typewriter { font-family: monospace; font-size: 1.5rem; color: var(--cyber-blue); margin-top: 15px; border-right: 2px solid var(--cyber-blue); padding-right: 5px; animation: blink 0.8s infinite; white-space: nowrap; overflow: hidden; }
-        @keyframes blink { 50% { border-color: transparent; } }
-        
-        /* 荒诞派哲学引用框 */
-        .camus-quote { margin-top: 40px; padding: 20px 40px; border-left: 4px solid var(--cyber-purple); background: var(--glass-bg); font-style: italic; color: var(--text-muted); max-width: 600px; text-align: center; border-radius: 0 8px 8px 0; backdrop-filter: blur(5px); }
-
-        /* 通用区块样式 */
-        section { padding: 100px 10%; max-width: 1200px; margin: 0 auto; position: relative; }
-        .section-title { font-size: 2.5rem; color: var(--cyber-blue); margin-bottom: 50px; display: inline-block; position: relative; }
-        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 50%; height: 3px; background: var(--cyber-blue); box-shadow: 0 0 10px var(--cyber-blue); }
-
-        /* 第二屏：六边形战士雷达图布局 */
-        .skills-container { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 40px; }
-        .radar-chart { flex: 1; min-width: 400px; height: 500px; }
-        .skills-desc { flex: 1; min-width: 300px; }
-        .skill-tag { display: inline-block; padding: 8px 15px; background: rgba(0,243,255,0.1); border: 1px solid var(--cyber-blue); color: var(--cyber-blue); border-radius: 20px; margin: 5px; font-size: 0.9rem; font-family: monospace; }
-
-        /* 第三屏：赛博时间轴 */
-        .timeline { position: relative; padding-left: 30px; border-left: 2px solid rgba(0,243,255,0.2); }
-        .timeline-item { position: relative; margin-bottom: 50px; background: var(--glass-bg); padding: 30px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s, box-shadow 0.3s; }
-        .timeline-item:hover { transform: translateX(10px); box-shadow: 0 0 20px rgba(0,243,255,0.15); border-color: rgba(0,243,255,0.3); }
-        .timeline-item::before { content: ''; position: absolute; left: -37px; top: 30px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg-dark); border: 2px solid var(--cyber-blue); box-shadow: 0 0 10px var(--cyber-blue); }
-        .time-badge { color: var(--cyber-purple); font-family: monospace; font-weight: bold; margin-bottom: 10px; display: block; }
-        .item-title { font-size: 1.5rem; margin: 0 0 10px 0; color: #fff; }
-        .item-subtitle { color: var(--cyber-blue); font-size: 1rem; margin-bottom: 15px; font-weight: bold; }
-        .item-desc { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
-
-        /* 底部链接区 */
-        .footer-card { text-align: center; padding: 60px; background: linear-gradient(135deg, rgba(0,243,255,0.1), rgba(176,38,255,0.1)); border-radius: 20px; border: 1px solid rgba(0,243,255,0.2); margin-bottom: 50px; }
-        .btn { padding: 15px 40px; background: transparent; border: 2px solid var(--cyber-blue); color: var(--cyber-blue); font-size: 1.1rem; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s; margin: 10px; text-decoration: none; display: inline-block; }
-        .btn:hover { background: var(--cyber-blue); color: var(--bg-dark); box-shadow: 0 0 20px var(--cyber-blue); }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 3rem; }
-            .skills-container { flex-direction: column; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="刘彦峰的工程履历与项目作品集，方向涵盖电气自动化、工业数字化与 AI 工程。">
+  <title>刘彦峰 | 工程履历</title>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="./resume.css?v=20260815-1">
 </head>
 <body>
-
-    <nav>
-        <div class="logo">LYF_PORTFOLIO</div>
-        <div class="links">
-            <a href="#skills">核心堆栈</a>
-            <a href="#experience">实战纪元</a>
-            <a href="https://blog.lyf233.cn">数字自留地</a>
-        </div>
+  <div class="page-progress" aria-hidden="true"><span></span></div>
+  <header class="site-nav">
+    <a class="brand" href="#top" aria-label="回到顶部"><span>LYF</span><small>ENGINEERING PROFILE</small></a>
+    <nav aria-label="页面导航">
+      <a href="#experience">经历</a>
+      <a href="#projects">项目</a>
+      <a href="#credentials">成果</a>
+      <a href="#contact">联系</a>
     </nav>
+    <button class="icon-button" type="button" id="print-resume" aria-label="打印或导出 PDF" title="打印或导出 PDF"><i class="fa-solid fa-file-arrow-down"></i></button>
+  </header>
 
-    <section class="hero" id="home">
-        <div class="glitch-wrapper">
-            <h1 class="hero-title">刘彦峰</h1>
-            <div class="typewriter" id="typewriter-text"></div>
-            <div class="camus-quote">
-                "对电磁场理论、嵌入式系统与智能控制抱有极高热忱。在推石头的荒诞中，找寻数字与物理世界的真理。"
-            </div>
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-media" src="./assets/engineering-workbench.jpg" alt="工程师在工作台审阅机械与控制系统图纸">
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">ELECTRICAL ENGINEERING · INDUSTRIAL DIGITALIZATION</p>
+        <h1 id="hero-title">刘彦峰</h1>
+        <p class="hero-lead">把电气控制、现场网络与软件系统连接成可部署、可维护的工程方案。</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#projects"><i class="fa-solid fa-arrow-down"></i> 查看代表项目</a>
+          <a class="text-action" href="mailto:863088821@qq.com"><i class="fa-regular fa-envelope"></i> 发送邮件</a>
         </div>
+      </div>
+      <div class="hero-facts" aria-label="基本信息">
+        <div><span>教育</span><strong>西南石油大学 · 2027 届</strong></div>
+        <div><span>专业</span><strong>电气工程及其自动化</strong></div>
+        <div><span>所在地</span><strong>成都 · 新都</strong></div>
+        <div><span>方向</span><strong>自动化 / 工业 AI / 系统集成</strong></div>
+      </div>
     </section>
 
-    <section id="skills">
-        <h2 class="section-title">01. 核心堆栈 / TECH STACK</h2>
-        <div class="skills-container">
-            <div class="skills-desc">
-                <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;">
-                    不仅限于传统的强弱电理论，我更倾向于构建从硬件底层到云端部署的闭环生态。现于西南石油大学李平原教授团队中深耕科研。
-                </p>
-                <div style="margin-bottom: 15px;">
-                    <strong style="color:#fff; display:block; margin-bottom:10px;">硬件与底层控制</strong>
-                    <span class="skill-tag">Arduino</span> <span class="skill-tag">STM32</span> <span class="skill-tag">Keil/Proteus</span> <span class="skill-tag">PLC编程</span>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <strong style="color:#fff; display:block; margin-bottom:10px;">工程仿真与算法</strong>
-                    <span class="skill-tag">MATLAB</span> <span class="skill-tag">Simulink</span> <span class="skill-tag">电磁场动力学计算</span>
-                </div>
-                <div>
-                    <strong style="color:#fff; display:block; margin-bottom:10px;">软件全栈与 AI 部署</strong>
-                    <span class="skill-tag">C/Java/Python</span> <span class="skill-tag">Docker</span> <span class="skill-tag">本地大模型部署</span> <span class="skill-tag">Web 3D可视化</span>
-                </div>
-            </div>
-            <div class="radar-chart" id="radar-canvas"></div>
-        </div>
+    <section class="intro-band section-shell" aria-labelledby="profile-title">
+      <div class="section-index">00 / PROFILE</div>
+      <div class="intro-copy">
+        <h2 id="profile-title">跨越设备、网络与应用层的工程实践</h2>
+        <p>电气工程及其自动化本科生，实践覆盖工业设备数字化、现场网络故障排查、嵌入式控制、MATLAB/Simulink 仿真，以及 Python、Docker、LLM/RAG 服务集成。关注的不是单点技术展示，而是系统能否从实验环境走向稳定运行。</p>
+      </div>
+      <div class="contact-strip">
+        <a href="tel:+8615388375500"><i class="fa-solid fa-phone"></i><span>153-8837-5500</span></a>
+        <button type="button" id="copy-email" data-copy="863088821@qq.com"><i class="fa-regular fa-copy"></i><span>863088821@qq.com</span></button>
+        <a href="https://www.lyf233.cn"><i class="fa-solid fa-globe"></i><span>www.lyf233.cn</span></a>
+        <a href="https://github.com/nomadpanda1"><i class="fa-brands fa-github"></i><span>nomadpanda1</span></a>
+      </div>
     </section>
 
-    <section id="experience">
-        <h2 class="section-title">02. 实战纪元 / EXPERIENCE</h2>
+    <section class="capabilities section-shell" aria-labelledby="capabilities-title">
+      <div class="section-heading">
+        <div><span class="section-index">01 / CAPABILITIES</span><h2 id="capabilities-title">能力结构</h2></div>
+        <p>从控制对象到服务接口，按工程链路组织能力。</p>
+      </div>
+      <div class="capability-grid">
+        <article>
+          <i class="fa-solid fa-bolt"></i>
+          <h3>电气与自动化</h3>
+          <p>电路、电磁场、模拟/数字电子技术，MATLAB/Simulink，西门子 PLC 与 EPLAN 实习实践。</p>
+          <div class="tag-row"><span>MATLAB</span><span>Simulink</span><span>PLC</span><span>EPLAN</span></div>
+        </article>
+        <article>
+          <i class="fa-solid fa-microchip"></i>
+          <h3>嵌入式与控制</h3>
+          <p>STM32、Arduino、C 语言寄存器级驱动、传感器采集、PWM 电机控制与闭环控制。</p>
+          <div class="tag-row"><span>STM32</span><span>Arduino</span><span>C</span><span>PWM</span></div>
+        </article>
+        <article>
+          <i class="fa-solid fa-server"></i>
+          <h3>AI 与应用工程</h3>
+          <p>Python、Docker、开源 LLM 本地部署、LangChain、RAG、REST API 与服务集成。</p>
+          <div class="tag-row"><span>Python</span><span>Docker</span><span>LLM</span><span>RAG</span></div>
+        </article>
+        <article>
+          <i class="fa-solid fa-network-wired"></i>
+          <h3>网络与现场</h3>
+          <p>TCP/UDP、HFC/FTTH 巡检、协议分析、链路故障定位、接地与电磁屏蔽整改。</p>
+          <div class="tag-row"><span>TCP/UDP</span><span>FTTH</span><span>协议分析</span><span>EMC</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="experience-band" id="experience" aria-labelledby="experience-title">
+      <div class="section-shell">
+        <div class="section-heading">
+          <div><span class="section-index">02 / EXPERIENCE</span><h2 id="experience-title">实习经历</h2></div>
+          <p>工业自动化、系统开发与现场网络运维。</p>
+        </div>
         <div class="timeline">
-            
-            <div class="timeline-item">
-                <span class="time-badge">2026.03 - 至今</span>
-                <h3 class="item-title">“AI+物理实验”带电粒子电磁场动力学 3D仿真平台</h3>
-                <div class="item-subtitle">核心开发者 | 物理引擎与 WebGL 架构</div>
-                <div class="item-desc">
-                    突破传统物理实验限制，将电磁场理论与 Web 前端渲染技术深度结合。构建了带电粒子在三维空间中受洛伦兹力运动的可视化仿真引擎，极大地提升了理论参数调节的实时交互性与直观体验。
-                </div>
+          <article>
+            <div class="timeline-date">2026.07 — 2026.09</div>
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <p class="company">东方宏华石油设备有限公司</p>
+              <h3>数字化研发实习生</h3>
+              <p>学习并应用 EPLAN 电气图纸设计与西门子 PLC 技术，参与大型钻机自动化研发和数字化升级相关工作。</p>
             </div>
-
-            <div class="timeline-item">
-                <span class="time-badge">2024.09 - 至今</span>
-                <h3 class="item-title">油气管网场站巡检机器人研究</h3>
-                <div class="item-subtitle">科研骨干 | 项目编号: 2024KSP07025</div>
-                <div class="item-desc">
-                    针对油气管网特殊高危环境，深入参与巡检机器人底层控制系统研发。结合电气工程与自动化专业知识，不断优化机器人的电机驱动逻辑与环境感知数据采集稳定性。
-                </div>
+          </article>
+          <article>
+            <div class="timeline-date">2026.05 — 至今</div>
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <p class="company">中信证券股份有限公司</p>
+              <h3>系统开发实习</h3>
+              <p>参与贷后一体化系统开发，积累业务系统工程化、服务部署与跨模块协作实践。</p>
             </div>
-
-            <div class="timeline-item">
-                <span class="time-badge">2026.01 - 2026.02</span>
-                <h3 class="item-title">中国广电四川网络股份有限公司</h3>
-                <div class="item-subtitle">网络维护工程师 (实习) | 安居区分公司</div>
-                <div class="item-desc">
-                    主导辖区内 HFC 网络、光纤传输系统及核心交换设备的日常巡检与调试。降维运用高校电气与供配电理论知识解决弱电系统综合布线痛点，凭借高精度的网络故障排查效率，获官方“表现优异”评价。
-                </div>
+          </article>
+          <article>
+            <div class="timeline-date">2026.01 — 2026.02</div>
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <p class="company">中国广电四川网络股份有限公司安居区分公司</p>
+              <h3>网络运维实习生</h3>
+              <p>参与 HFC/FTTH 网络巡检和故障排查，使用协议分析设备定位链路异常；协助完成弱电箱接地与电磁屏蔽改造。</p>
             </div>
-
-            <div class="timeline-item">
-                <span class="time-badge">2023.09 - 持续推进</span>
-                <h3 class="item-title">个人数字化基础设施建设</h3>
-                <div class="item-subtitle">全栈架构师 | Docker & Serverless</div>
-                <div class="item-desc">
-                    独立研发并上线高定制化个人极客站点 (lyf233.cn)。运用 Docker 容器技术在本地 GPU 成功部署大型 AI 模型，并打通 API 接口，搭建了专属于个人的智能知识库与 AI 代理终端。同时主导基于 Arduino 的智能小车底层 C 语言控制开发。
-                </div>
-            </div>
-
+          </article>
         </div>
+      </div>
     </section>
 
-    <section>
-        <div class="footer-card">
-            <h2 style="font-size: 2rem; margin-bottom: 20px;">准备好建立连接了吗？</h2>
-            <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">无论是硬核的学术探讨，还是极客项目合作，随时欢迎发送电波。</p>
-            <a href="mailto:863088821@qq.com" class="btn"><i class="fas fa-envelope"></i> 触发邮件协议</a>
-            <a href="https://blog.lyf233.cn" class="btn" style="background: var(--cyber-blue); color: var(--bg-dark);"><i class="fas fa-globe"></i> 跃迁至数字自留地</a>
+    <section class="projects section-shell" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <div><span class="section-index">03 / SELECTED WORK</span><h2 id="projects-title">代表项目</h2></div>
+        <div class="project-filters" role="group" aria-label="筛选项目">
+          <button type="button" class="is-active" data-filter="all">全部</button>
+          <button type="button" data-filter="control">控制与能源</button>
+          <button type="button" data-filter="ai">AI 工程</button>
+          <button type="button" data-filter="software">应用开发</button>
         </div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card project-featured" data-category="control">
+          <div class="project-code">R01 · 2024KSP07025</div>
+          <h3>油气管网场站特种巡检机器人</h3>
+          <p>使用 MATLAB/Simulink 构建多刚体动力学模型，参与底层闭环反馈控制逻辑设计，并面向防爆与强电磁干扰场景研究抗干扰方案。</p>
+          <div class="tag-row"><span>MATLAB</span><span>Simulink</span><span>闭环控制</span></div>
+        </article>
+        <article class="project-card" data-category="control">
+          <div class="project-code">E02 · ENERGY</div>
+          <h3>飞轮储能与微电网监控</h3>
+          <p>参与飞轮储能系列项目的架构、仿真与控制逻辑；参与微电网多源能量协同监控和电池健康管理功能开发，并整理约 60 页代码与接口文档。</p>
+          <div class="tag-row"><span>储能</span><span>BMS</span><span>技术文档</span></div>
+        </article>
+        <article class="project-card" data-category="ai">
+          <div class="project-code">A03 · LOCAL AI</div>
+          <h3>本地化 LLM 与 RAG 智能体系统</h3>
+          <p>使用 Docker 部署开源 LLM，通过 Python 异步后端与 REST API 封装推理能力，组合 LangChain、向量检索和 RAG 流程支持系统集成。</p>
+          <div class="tag-row"><span>Docker</span><span>Python</span><span>RAG</span></div>
+        </article>
+        <article class="project-card" data-category="ai software">
+          <div class="project-code">A04 · INTERACTION</div>
+          <h3>Project AIRI 自托管 AI 伴侣</h3>
+          <p>基于 Electron、Live2D、Node.js、DeepSeek API 与本地 TTS 构建桌面应用，实现流式对话、语音合成、虚拟形象渲染和跨域通信链路。</p>
+          <div class="tag-row"><span>Electron</span><span>Live2D</span><span>TTS</span></div>
+        </article>
+        <article class="project-card" data-category="software control">
+          <div class="project-code">S05 · WEBGL</div>
+          <h3>“AI + 物理实验”电磁场 3D 仿真</h3>
+          <p>使用洛伦兹力方程离散积分与 WebGL 实现带电粒子运动仿真，把电磁场理论参数转化为可实时调节和观察的交互实验。</p>
+          <div class="tag-row"><span>WebGL</span><span>数值积分</span><span>电磁场</span></div>
+        </article>
+        <article class="project-card" data-category="ai">
+          <div class="project-code">A06 · LOGGING</div>
+          <h3>智能测井解释机器人“测井一姐”</h3>
+          <p>参与 FCN 测井曲线图像解析、语音交互、三维可视化及随钻资料处理功能集成，探索 AI 模型在油气工程场景中的协同应用。</p>
+          <div class="tag-row"><span>FCN</span><span>三维可视化</span><span>系统集成</span></div>
+        </article>
+        <article class="project-card" data-category="software">
+          <div class="project-code">S07 · CLOUD PLATFORM</div>
+          <h3>个人云原生数字平台</h3>
+          <p>在自有服务器部署多站点、API 网关与应用服务，实践容器隔离、反向代理、Cloudflare Tunnel、发布回滚与持续维护。</p>
+          <div class="tag-row"><span>Docker</span><span>Caddy</span><span>Cloudflare</span></div>
+        </article>
+        <article class="project-card" data-category="software control">
+          <div class="project-code">S08 · EMBEDDED</div>
+          <h3>Arduino 智能车辆与失物招领小程序</h3>
+          <p>在智能车辆项目中负责寄存器级驱动和 PWM 电机控制；独立完成失物招领微信小程序前后端及云开发流程。</p>
+          <div class="tag-row"><span>Arduino</span><span>C</span><span>微信云开发</span></div>
+        </article>
+      </div>
     </section>
 
-    <script>
-        // 1. 打字机特效逻辑
-        const texts = ["电气工程与自动化 本科", "全栈独立开发者", "微电网底层架构师", "推石头的西西弗斯"];
-        let count = 0; let index = 0; let currentText = ""; let letter = "";
-        
-        function type() {
-            if (count === texts.length) { count = 0; }
-            currentText = texts[count];
-            letter = currentText.slice(0, ++index);
-            document.getElementById("typewriter-text").textContent = letter;
-            if (letter.length === currentText.length) {
-                count++; index = 0;
-                setTimeout(type, 2000); // 停顿2秒
-            } else {
-                setTimeout(type, 100); // 打字速度
-            }
-        }
-        setTimeout(type, 500);
+    <section class="credentials-band" id="credentials" aria-labelledby="credentials-title">
+      <div class="section-shell credentials-layout">
+        <div>
+          <span class="section-index">04 / CREDENTIALS</span>
+          <h2 id="credentials-title">成果与经历</h2>
+        </div>
+        <div class="credential-list">
+          <article>
+            <span>知识产权</span>
+            <h3>无轴混合磁浮飞轮储能系统</h3>
+            <p>实用新型专利已受理 · 申请号 202522833555.0</p>
+          </article>
+          <article>
+            <span>竞赛成果</span>
+            <h3>跨学科工程竞赛实践</h3>
+            <p>高校电气电子工程大赛省级三等奖、全国大学生创新比赛铜奖、“挑战杯”三等奖。</p>
+          </article>
+          <article>
+            <span>校园经历</span>
+            <h3>西南石油大学学生会科技部</h3>
+            <p>2023.09 — 2024.09 · 协助组织校级科技竞赛，为参赛团队提供技术咨询与现场支持。</p>
+          </article>
+          <article>
+            <span>教育背景</span>
+            <h3>电气工程及其自动化本科</h3>
+            <p>西南石油大学 · 2023.09 — 2027.06 · 预计获工学学士</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        // 2. 六边形战士雷达图 (ECharts)
-        const chartDom = document.getElementById('radar-canvas');
-        const myChart = echarts.init(chartDom, 'dark');
-        const option = {
-            backgroundColor: 'transparent',
-            radar: {
-                indicator: [
-                    { name: '硬件/单片机 (Arduino/STM32)', max: 100 },
-                    { name: '电气仿真与建模 (MATLAB)', max: 100 },
-                    { name: '自动化控制 (PLC/弱电)', max: 100 },
-                    { name: '软件编程 (C/Java/Python)', max: 100 },
-                    { name: '前端图形学 (Web/3D)', max: 100 },
-                    { name: 'AI/容器化部署 (Docker)', max: 100 }
-                ],
-                center: ['50%', '50%'], radius: '65%',
-                splitArea: { areaStyle: { color: ['rgba(0,243,255,0.02)', 'rgba(0,243,255,0.05)'] } },
-                axisLine: { lineStyle: { color: 'rgba(0,243,255,0.2)' } },
-                splitLine: { lineStyle: { color: 'rgba(0,243,255,0.2)' } },
-                axisName: { color: '#00f3ff', fontSize: 13, fontFamily: 'monospace' }
-            },
-            series: [{
-                type: 'radar',
-                data: [{
-                    value: [85, 95, 80, 85, 90, 92],
-                    name: '技能维度',
-                    itemStyle: { color: '#b026ff' },
-                    areaStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
-                        { offset: 0, color: 'rgba(176,38,255,0.1)' },
-                        { offset: 1, color: 'rgba(176,38,255,0.5)' }
-                    ])},
-                    lineStyle: { width: 2, color: '#b026ff' }
-                }]
-            }]
-        };
-        myChart.setOption(option);
-        window.addEventListener('resize', () => myChart.resize());
-    </script>
+    <section class="contact-band" id="contact" aria-labelledby="contact-title">
+      <div class="section-shell contact-layout">
+        <div>
+          <span class="section-index">05 / CONTACT</span>
+          <h2 id="contact-title">面向真实场景，继续构建。</h2>
+          <p>关注工业自动化、设备数字化、储能系统、现场技术支持与工业 AI 方向。</p>
+        </div>
+        <div class="contact-actions">
+          <a class="primary-action" href="mailto:863088821@qq.com"><i class="fa-regular fa-envelope"></i> 863088821@qq.com</a>
+          <a class="text-action" href="https://blog.lyf233.cn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 阅读技术博客</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>刘彦峰 · ENGINEERING PROFILE · 2026</span>
+    <a href="https://unsplash.com/@thisisengineering" rel="noopener noreferrer">首屏摄影：ThisisEngineering / Unsplash</a>
+  </footer>
+
+  <div class="copy-toast" role="status" aria-live="polite">邮箱已复制</div>
+  <script src="./resume.js?v=20260815-1"></script>
 </body>
 </html>
