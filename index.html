@@ -7,7 +7,7 @@
   <title>刘彦峰 | 工程履历</title>
   <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="./resume.css?v=20260815-1">
+  <link rel="stylesheet" href="./resume.css?v=20260819-2">
 </head>
 <body>
   <div class="page-progress" aria-hidden="true"><span></span></div>
@@ -27,9 +27,13 @@
       <img class="hero-media" src="./assets/engineering-workbench.jpg" alt="工程师在工作台审阅机械与控制系统图纸">
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="eyebrow">ELECTRICAL ENGINEERING · INDUSTRIAL DIGITALIZATION</p>
+        <p class="eyebrow">ELECTRICAL ENGINEERING · EMBEDDED · AI SYSTEMS</p>
         <h1 id="hero-title">刘彦峰</h1>
-        <p class="hero-lead">把电气控制、现场网络与软件系统连接成可部署、可维护的工程方案。</p>
+        <p class="hero-lead">电气硬件、嵌入式底层与 AI 系统的跨界开发者，面向真实设备把控制逻辑、数据链路和智能应用做成可部署的工程方案。</p>
+        <div class="hero-roles" aria-label="求职方向">
+          <span>嵌入式软件工程师</span><span>智能系统与 Agent 开发</span><span>电气控制与储能算法研发</span>
+        </div>
+        <p class="hero-positioning">电气工程与 AI 跨界开发者 · 软硬件协同工程师 · 极客构建者</p>
         <div class="hero-actions">
           <a class="primary-action" href="#projects"><i class="fa-solid fa-arrow-down"></i> 查看代表项目</a>
           <a class="text-action" href="mailto:863088821@qq.com"><i class="fa-regular fa-envelope"></i> 发送邮件</a>
@@ -39,21 +43,52 @@
         <div><span>教育</span><strong>西南石油大学 · 2023 级</strong></div>
         <div><span>专业</span><strong>电气工程及其自动化</strong></div>
         <div><span>所在地</span><strong>成都 · 新都</strong></div>
-        <div><span>方向</span><strong>自动化 / 工业 AI / 系统集成</strong></div>
+        <div><span>求职意向</span><strong>嵌入式 / Agent / 电气控制与储能算法</strong></div>
       </div>
     </section>
 
     <section class="intro-band section-shell" aria-labelledby="profile-title">
       <div class="section-index">00 / PROFILE</div>
       <div class="intro-copy">
-        <h2 id="profile-title">跨越设备、网络与应用层的工程实践</h2>
-        <p>电气工程及其自动化专业 2023 级本科生，实践覆盖工业设备数字化、现场网络故障排查、嵌入式控制、MATLAB/Simulink 仿真，以及 Python、Docker、LLM/RAG 与智能体服务集成。做事务实、专业，关注的不是单点技术展示，而是系统能否从实验环境走向稳定运行。</p>
+        <h2 id="profile-title">把底层机理落成可运行的系统</h2>
+        <p>西南石油大学电气工程及其自动化专业 2023 级本科生。具备“电气硬件 + 嵌入式底层 + AI 前沿系统”的复合实践路径：从电路拓扑、寄存器和硬件时序，到 ROS2 导航、工业视觉、Graph RAG 多智能体与微电网调度。习惯从数学、物理和系统约束出发，建立可验证、可维护的工程闭环。</p>
+        <p class="profile-note">工作方式偏务实与工程化：先把问题、接口和边界说清楚，再选择合适的工具完成实现、部署、观测和迭代。</p>
       </div>
       <div class="contact-strip">
         <a href="tel:+8615388375500"><i class="fa-solid fa-phone"></i><span>153-8837-5500</span></a>
         <button type="button" id="copy-email" data-copy="863088821@qq.com"><i class="fa-regular fa-copy"></i><span>863088821@qq.com</span></button>
         <a href="https://www.lyf233.cn"><i class="fa-solid fa-globe"></i><span>www.lyf233.cn</span></a>
         <a href="https://github.com/nomadpanda1"><i class="fa-brands fa-github"></i><span>nomadpanda1</span></a>
+      </div>
+    </section>
+
+    <section class="system-map section-shell" id="system-map" aria-labelledby="system-map-title">
+      <div class="section-heading">
+        <div><span class="section-index">00A / SYSTEM MAP</span><h2 id="system-map-title">工程系统图谱</h2></div>
+        <p>拖动旋转，点击节点查看我在不同技术层的实践连接。</p>
+      </div>
+      <div class="system-map-stage">
+        <canvas id="resume-graph" aria-label="可交互的工程技能与项目关系图"></canvas>
+        <div class="system-map-hud"><span><b id="graph-node-count">0</b> NODES</span><span><b id="graph-link-count">0</b> LINKS</span></div>
+        <aside class="system-map-detail" aria-live="polite">
+          <span id="graph-detail-kind">ENGINEERING NODE</span>
+          <h3 id="graph-detail-title">选择一个节点</h3>
+          <p id="graph-detail-copy">把技能、项目与工程方向放在同一张图里观察。</p>
+          <div class="tag-row" id="graph-detail-tags"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="principles section-shell" aria-labelledby="principles-title">
+      <div class="section-heading">
+        <div><span class="section-index">00B / WORKING STYLE</span><h2 id="principles-title">工程师特质</h2></div>
+        <p>复杂问题里保持方向感，把抽象判断转成可执行步骤。</p>
+      </div>
+      <div class="principle-grid">
+        <article><span>01</span><h3>坚韧与自驱</h3><p>能在电路、ROS2、视觉和 Agent 架构之间自主补齐技术断层，持续推进到可运行结果。</p></article>
+        <article><span>02</span><h3>第一性原理</h3><p>从数学、物理、时序和系统边界出发定位问题，不停留在 API 拼接层面。</p></article>
+        <article><span>03</span><h3>硬核务实</h3><p>重视代码、电路、日志和现场数据，优先选择能部署、能观测、能维护的方案。</p></article>
+        <article><span>04</span><h3>系统视野</h3><p>既能深入寄存器和硬件细节，也能设计多 Agent、微电网和云原生服务拓扑。</p></article>
       </div>
     </section>
 
@@ -66,26 +101,26 @@
         <article>
           <i class="fa-solid fa-bolt"></i>
           <h3>电气与自动化</h3>
-          <p>电路、电磁场、模拟/数字电子技术，MATLAB/Simulink，西门子 PLC 与 EPLAN 实习实践。</p>
-          <div class="tag-row"><span>MATLAB</span><span>Simulink</span><span>PLC</span><span>EPLAN</span></div>
+          <p>电路、电磁场、模拟/数字电子技术，电机控制、储能调度和 MATLAB/Simulink 建模仿真。</p>
+          <div class="tag-row"><span>MATLAB</span><span>Simulink</span><span>PLC</span><span>EPLAN</span><span>储能</span></div>
         </article>
         <article>
           <i class="fa-solid fa-microchip"></i>
           <h3>嵌入式与控制</h3>
-          <p>STM32、Arduino、C 语言寄存器级驱动、传感器采集、PWM 电机控制与闭环控制。</p>
-          <div class="tag-row"><span>STM32</span><span>Arduino</span><span>C</span><span>PWM</span></div>
+          <p>STM32、ESP32、51 单片机与 Arduino，覆盖寄存器级驱动、传感器采集、PWM 电机控制和嵌入式调试。</p>
+          <div class="tag-row"><span>STM32</span><span>ESP32</span><span>C/C++</span><span>PWM</span><span>FreeRTOS</span></div>
         </article>
         <article>
           <i class="fa-solid fa-server"></i>
           <h3>AI 与应用工程</h3>
-          <p>Python、Docker、开源 LLM 本地部署、LangChain、RAG、REST API 与服务集成。</p>
-          <div class="tag-row"><span>Python</span><span>Docker</span><span>LLM</span><span>RAG</span></div>
+          <p>Python、Node.js、Docker、开源 LLM 本地部署、Graph RAG、多 Agent 调度、REST API 与服务集成。</p>
+          <div class="tag-row"><span>Python</span><span>Node.js</span><span>Docker</span><span>Graph RAG</span><span>Agent</span></div>
         </article>
         <article>
           <i class="fa-solid fa-network-wired"></i>
           <h3>网络与现场</h3>
-          <p>TCP/UDP、HFC/FTTH 巡检、协议分析、链路故障定位、接地与电磁屏蔽整改。</p>
-          <div class="tag-row"><span>TCP/UDP</span><span>FTTH</span><span>协议分析</span><span>EMC</span></div>
+          <p>TCP/UDP、HFC/FTTH 巡检、协议分析、链路故障定位、弱电设备维护与接地/电磁屏蔽整改。</p>
+          <div class="tag-row"><span>TCP/UDP</span><span>FTTH</span><span>协议分析</span><span>EMC</span><span>Linux</span></div>
         </article>
       </div>
     </section>
@@ -98,21 +133,21 @@
         </div>
         <div class="timeline">
           <article>
-            <div class="timeline-date">2026.07 — 2026.09</div>
+            <div class="timeline-date">2026.05 — 2026.08</div>
             <div class="timeline-marker" aria-hidden="true"></div>
             <div class="timeline-content">
-              <p class="company">东方宏华石油设备有限公司</p>
-              <h3>数字化研发实习生</h3>
-              <p>学习并应用 EPLAN 电气图纸设计与西门子 PLC 技术，参与大型钻机自动化研发和数字化升级相关工作。</p>
+              <p class="company">东方电气 / 东方宏华</p>
+              <h3>电气研发与设计实习生</h3>
+              <p>参与大型工业电气控制装备现场工作，完成控制柜原理图校核、布线优化、系统调试与测试；学习 EPLAN 电气设计和西门子 PLC 技术，理解从图纸到现场联调的完整链路。</p>
             </div>
           </article>
           <article>
-            <div class="timeline-date">2026.05 — 至今</div>
+            <div class="timeline-date">2026.08</div>
             <div class="timeline-marker" aria-hidden="true"></div>
             <div class="timeline-content">
-              <p class="company">中信证券股份有限公司</p>
-              <h3>系统开发实习</h3>
-              <p>参与贷后一体化系统开发，积累业务系统工程化、服务部署与跨模块协作实践。</p>
+              <p class="company">金融机构</p>
+              <h3>系统开发实习生</h3>
+              <p>参与内部业务服务后台开发，完成模块化接口封装、代码重构与系统稳定性联调，熟悉业务约束下的服务协作与交付节奏。</p>
             </div>
           </article>
           <article>
@@ -121,7 +156,7 @@
             <div class="timeline-content">
               <p class="company">中国广电四川网络股份有限公司安居区分公司</p>
               <h3>网络运维实习生</h3>
-              <p>参与 HFC/FTTH 网络巡检和故障排查，使用协议分析设备定位链路异常；协助完成弱电箱接地与电磁屏蔽改造。</p>
+              <p>负责通信干线和片区网络节点的弱电设备故障排查、物理链路检测与网络协议维护，参与 HFC/FTTH 巡检及弱电箱接地、电磁屏蔽整改。</p>
             </div>
           </article>
         </div>
@@ -141,21 +176,21 @@
       <div class="project-grid">
         <article class="project-card project-featured" data-category="control">
           <div class="project-code">R01 · 2024KSP07025</div>
-          <h3>油气管网场站特种巡检机器人</h3>
-          <p>使用 MATLAB/Simulink 构建多刚体动力学模型，参与底层闭环反馈控制逻辑设计，并面向防爆与强电磁干扰场景研究抗干扰方案。</p>
-          <div class="tag-row"><span>MATLAB</span><span>Simulink</span><span>闭环控制</span></div>
+          <h3>油气管网场站智能巡检机器人</h3>
+          <p>课题负责人。采用 ROS2 搭建移动机器人底盘控制、TF 变换、建图与导航栈，完成 YDLIDAR X3PRO 标定与 SLAM 建图；部署 YOLOX 工业视觉模型，面向复杂光照下的仪表与跑冒滴漏检测。</p>
+          <div class="tag-row"><span>ROS2</span><span>YDLIDAR</span><span>SLAM</span><span>YOLOX</span></div>
         </article>
         <article class="project-card" data-category="control">
           <div class="project-code">E02 · ENERGY</div>
-          <h3>飞轮储能与微电网监控</h3>
-          <p>参与飞轮储能系列项目的架构、仿真与控制逻辑；参与微电网多源能量协同监控和电池健康管理功能开发，并整理约 60 页代码与接口文档。</p>
-          <div class="tag-row"><span>储能</span><span>BMS</span><span>技术文档</span></div>
+          <h3>MicroGridSystem 微电网储能调度</h3>
+          <p>核心开发。以 C++ 编写高频动态仿真与充放电优化内核，Python 搭建策略调度模块，支持源-网-荷-储多工况推演、能效分析和可视化数据导出；参与飞轮储能与电池健康管理功能开发。</p>
+          <div class="tag-row"><span>C++</span><span>Python</span><span>BMS</span><span>优化调度</span></div>
         </article>
         <article class="project-card" data-category="ai">
           <div class="project-code">A03 · LOCAL AI</div>
-          <h3>本地化 LLM 与 RAG 智能体系统</h3>
-          <p>使用 Docker 部署开源 LLM，通过 Python 异步后端与 REST API 封装推理能力，组合 LangChain、向量检索和 RAG 流程支持系统集成。</p>
-          <div class="tag-row"><span>Docker</span><span>Python</span><span>RAG</span></div>
+          <h3>Cyber-Secretary（未花）多智能体系统</h3>
+          <p>独立开发，已获计算机软件著作权。基于 Node.js 异步调度内核与 Graph RAG 构建长期图谱记忆、任务拆解和多 Agent 协同；结合 Ollama、本地模型与 Docker 实现高隐私、低时延的个人自动化任务流。</p>
+          <div class="tag-row"><span>Node.js</span><span>Graph RAG</span><span>Multi-Agent</span><span>Ollama</span></div>
         </article>
         <article class="project-card" data-category="ai software">
           <div class="project-code">A04 · INTERACTION</div>
@@ -165,9 +200,9 @@
         </article>
         <article class="project-card" data-category="software control">
           <div class="project-code">S05 · WEBGL</div>
-          <h3>“AI + 物理实验”电磁场 3D 仿真</h3>
-          <p>使用洛伦兹力方程离散积分与 WebGL 实现带电粒子运动仿真，把电磁场理论参数转化为可实时调节和观察的交互实验。</p>
-          <div class="tag-row"><span>WebGL</span><span>数值积分</span><span>电磁场</span></div>
+          <h3>WebGL 3D 带电粒子动力学引擎</h3>
+          <p>物理竞赛应用。基于洛伦兹力方程离散积分，在 Three.js 中实现复杂电磁场下的带电粒子实时数值解算与空间渲染；使用 ECharts 映射动能、势能和场强变化。</p>
+          <div class="tag-row"><span>Three.js</span><span>WebGL</span><span>数值积分</span><span>ECharts</span></div>
         </article>
         <article class="project-card" data-category="ai">
           <div class="project-code">A06 · LOGGING</div>
@@ -242,6 +277,9 @@
   </footer>
 
   <div class="copy-toast" role="status" aria-live="polite">邮箱已复制</div>
-  <script src="./resume.js?v=20260815-1"></script>
+  <script src="https://fastly.jsdelivr.net/npm/three@0.128.0/build/three.min.js" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" crossorigin="anonymous"></script>
+  <script src="./resume-graph.js?v=20260819-1"></script>
+  <script src="./resume.js?v=20260819-2"></script>
 </body>
 </html>
