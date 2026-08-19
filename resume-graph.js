@@ -34,6 +34,8 @@ if (canvas) {
   controls.enableDamping = !reducedMotion;
   controls.dampingFactor = 0.055;
   controls.enablePan = false;
+  // Keep the page's normal wheel scrolling; the graph remains rotatable by drag.
+  controls.enableZoom = false;
   controls.minDistance = 11;
   controls.maxDistance = 43;
   controls.minPolarAngle = Math.PI * 0.16;
